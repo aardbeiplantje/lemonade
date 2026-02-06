@@ -24,8 +24,8 @@ RUN apt update && apt upgrade -y \
 
 
 RUN useradd -N -M -d /dev/shm/ -u 1000 lemonade-runtime
+RUN mkdir -p /models && chown -R lemonade-runtime:users /models
 USER lemonade-runtime
-RUN mkdir -p /models
 WORKDIR /dev/shm
 ENV LEMONADE_LLAMACPP_ARGS="--no-mmap --prio 3 --no-kv-offload --context-shift --no-warmup --batch-size 2048 --flash-attn on --ubatch-size 1024"
 ENV LEMONADE_LLAMACPP_BACKEND="rocm"
