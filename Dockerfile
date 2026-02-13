@@ -1,6 +1,7 @@
 FROM debian:trixie-slim AS runtime
 WORKDIR /tmp
-ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server-minimal_9.3.0_amd64.deb lemonade.deb
+ARG LEMONADE_VERSION=9.3.2
+ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server-minimal_${LEMONADE_VERSION}_amd64.deb lemonade.deb
 RUN apt update && apt install -y --no-install-recommends \
     ca-certificates \
     libcurl4 \
@@ -67,7 +68,7 @@ WORKDIR /lemonade-server
 ENV LEMONADE_LLAMACPP_ARGS="--no-mmap --prio 3 --no-kv-offload --context-shift --no-warmup --batch-size 2048 --flash-attn on --ubatch-size 1024"
 ENV LEMONADE_LLAMACPP=rocm
 ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
-ENV LEMONADE_HOST=0.0.0.0
+ENV LEMONADE_HOST=::
 ENV LEMONADE_PORT=8000
 ENV LEMONADE_LOG_LEVEL=info
 ENV LEMONADE_CTX_SIZE=4096
