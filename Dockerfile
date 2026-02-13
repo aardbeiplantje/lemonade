@@ -38,17 +38,17 @@ RUN    mkdir -p /lemonade-server/.cache \
 WORKDIR /lemonade
 USER root
 ADD https://github.com/ggml-org/llama.cpp/releases/download/b7869/llama-b7869-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
-RUN    mkdir -p /lemonade/bin/llama/vulkan \
-    && tar -xvf llama.tar.gz --strip-components=1 -C /lemonade/bin/llama/vulkan \
-    && chown -R lemonade-runtime:users /lemonade/bin/llama/vulkan \
+RUN    mkdir -p /lemonade/bin/llamacpp/vulkan \
+    && tar -xvf llama.tar.gz --strip-components=1 -C /lemonade/bin/llamacpp/vulkan \
+    && chown -R lemonade-runtime:users /lemonade/bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
 ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/b1170/llama-b1170-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
-RUN    mkdir -p /lemonade/bin/llama/rocm \
-    && unzip llama-rocm.zip -d /lemonade/bin/llama/rocm \
-    && chmod +x /lemonade/bin/llama/rocm/llama* \
-    && chown -R lemonade-runtime:users /lemonade/bin/llama/rocm \
+RUN    mkdir -p /lemonade/bin/llamacpp/rocm \
+    && unzip llama-rocm.zip -d /lemonade/bin/llamacpp/rocm \
+    && chmod +x /lemonade/bin/llamacpp/rocm/llama* \
+    && chown -R lemonade-runtime:users /lemonade/bin/llamacpp/rocm \
     && rm -f llama-rocm.zip
 
 USER root
