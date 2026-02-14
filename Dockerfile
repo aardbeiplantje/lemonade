@@ -83,4 +83,4 @@ ENV HF_HUB_CACHE=/hf/hub
 ENV HF_HOME=/hf
 ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
 ENV GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
-ENTRYPOINT ["/usr/bin/lemonade-server", "serve"]
+ENTRYPOINT ["/usr/bin/lemonade-server", "serve", "--max-loaded-models", "5"]
