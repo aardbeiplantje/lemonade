@@ -26,7 +26,7 @@ RUN apt update && apt upgrade -y \
 
 RUN useradd -N -M -d /lemonade-server/ -u 1000 lemonade-runtime
 RUN mkdir -p /models      && chown -R lemonade-runtime:users /models
-RUN mkdir -p /huggingface && chown -R lemonade-runtime:users /huggingface
+RUN mkdir -p /hf          && chown -R lemonade-runtime:users /hf
 
 WORKDIR /lemonade
 USER root
@@ -44,7 +44,7 @@ RUN    mkdir -p /lemonade/bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
-ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/b1170/llama-b1170-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
+ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/b1187/llama-b1187-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
 RUN    mkdir -p /lemonade/bin/llamacpp/rocm \
     && unzip llama-rocm.zip -d /lemonade/bin/llamacpp/rocm \
     && chmod +x /lemonade/bin/llamacpp/rocm/llama* \
@@ -79,8 +79,8 @@ ENV TMPDIR=/dev/shm
 ENV HF_HUB_ENABLE_HF_TRANSFER=1
 ENV HF_HUB_ENABLE_HF_TRANSFER=0
 ENV HF_HUB_DISABLE_XET=1
-ENV HF_HOME=/huggingface
-ENV HF_HUB_CACHE=/huggingface/hub
+ENV HF_HUB_CACHE=/hf/hub
+ENV HF_HOME=/hf
 ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
 ENV GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
 ENTRYPOINT ["/usr/bin/lemonade-server", "serve"]
