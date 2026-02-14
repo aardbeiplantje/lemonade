@@ -65,13 +65,13 @@ RUN    mkdir -p /lemonade/bin/sd-cpp \
 
 USER lemonade-runtime
 WORKDIR /lemonade-server
-ENV LEMONADE_LLAMACPP_ARGS="--no-mmap --prio 3 --no-kv-offload --context-shift --no-warmup --batch-size 2048 --flash-attn on --ubatch-size 1024"
+ENV LEMONADE_LLAMACPP_ARGS="--no-mmap --prio 3 --no-kv-offload --context-shift --no-warmup --batch-size 4096 --flash-attn on --ubatch-size 1024"
 ENV LEMONADE_LLAMACPP=rocm
 ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
 ENV LEMONADE_HOST=::
 ENV LEMONADE_PORT=8000
 ENV LEMONADE_LOG_LEVEL=info
-ENV LEMONADE_CTX_SIZE=4096
+ENV LEMONADE_CTX_SIZE=202752
 ENV LEMONADE_ENABLE_DGPU_GTT=1
 ENV LEMONADE_DISABLE_MODEL_FILTERING=0
 ENV LEMONADE_EXTRA_MODELS_DIR=/models
