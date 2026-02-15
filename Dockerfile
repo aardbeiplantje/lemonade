@@ -63,15 +63,17 @@ RUN    mkdir -p /lemonade/bin/sd-cpp \
     && chmod +x /lemonade/bin/sd-cpp/sd* \
     && rm -f sd-cpp.zip
 
+COPY llamacpp_presets.ini /lemonade/llamacpp_presets.ini
+
 USER lemonade-runtime
 WORKDIR /lemonade-server
-ENV LEMONADE_LLAMACPP_ARGS="--no-mmap --prio 3 --no-kv-offload --context-shift --no-warmup --batch-size 4096 --flash-attn on --ubatch-size 1024"
+ENV LEMONADE_LLAMACPP_ARGS="--models-preset /lemonade/llamacpp_presets.ini --models-dir /models/ --no-webui"
 ENV LEMONADE_LLAMACPP=rocm
 ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
 ENV LEMONADE_HOST=::
 ENV LEMONADE_PORT=8000
 ENV LEMONADE_LOG_LEVEL=info
-ENV LEMONADE_CTX_SIZE=202752
+ENV LEMONADE_CTX_SIZE=0
 ENV LEMONADE_ENABLE_DGPU_GTT=1
 ENV LEMONADE_DISABLE_MODEL_FILTERING=0
 ENV LEMONADE_EXTRA_MODELS_DIR=/models
@@ -84,3 +86,4 @@ ENV HF_HOME=/hf
 ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
 ENV GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
 ENTRYPOINT ["/usr/bin/lemonade-server", "serve", "--max-loaded-models", "5"]
+ENTRYPOINT ["/lemonade-server//.cache/lemonade/bin/llamacpp/rocm/llama-server", "--models-preset", "/lemonade/llamacpp_presets.ini", "--models-dir", "/models/", "--no-webui", "--host", "::", "--port", "8000"]
