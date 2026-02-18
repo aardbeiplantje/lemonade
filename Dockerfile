@@ -1,6 +1,6 @@
 FROM debian:trixie-slim AS runtime
 WORKDIR /tmp
-ARG LEMONADE_VERSION=9.3.3
+ARG LEMONADE_VERSION=9.3.4
 ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server-minimal_${LEMONADE_VERSION}_amd64.deb lemonade.deb
 RUN apt update && apt install -y --no-install-recommends \
     ca-certificates \
