@@ -68,6 +68,7 @@ RUN    mkdir -p /lemonade/bin/sd-cpp \
 
 COPY llamacpp_presets.ini /lemonade/llamacpp_presets.ini
 
+COPY lemonade.sh /lemonade.sh
 USER lemonade-runtime
 WORKDIR /lemonade-server
 ENV LEMONADE_LLAMACPP_ARGS="--models-preset /lemonade/llamacpp_presets.ini --models-dir /models/ --no-webui"
@@ -89,5 +90,4 @@ ENV HF_HOME=/hf
 ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
 ENV AMD_SERIALIZE_KERNEL=1
 ENV GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
-ENTRYPOINT ["/usr/bin/lemonade-server", "serve", "--max-loaded-models", "5"]
-ENTRYPOINT ["/lemonade-server//.cache/lemonade/bin/llamacpp/rocm/llama-server", "--models-preset", "/lemonade/llamacpp_presets.ini", "--models-dir", "/models/", "--no-webui", "--host", "::", "--port", "8000"]
+ENTRYPOINT ["/lemonade.sh"]
