@@ -1,7 +1,7 @@
 FROM debian:trixie-slim AS runtime
 WORKDIR /tmp
-ARG LEMONADE_VERSION=9.3.4
-ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server-minimal_${LEMONADE_VERSION}_amd64.deb lemonade.deb
+ARG LEMONADE_VERSION=10.0.0
+ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server_${LEMONADE_VERSION}_amd64.deb lemonade.deb
 RUN apt update && apt install -y --no-install-recommends \
     ca-certificates \
     libcurl4 \
@@ -37,7 +37,7 @@ RUN    mkdir -p /lemonade-server/.cache \
 
 WORKDIR /lemonade
 USER root
-ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b8152
+ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b8370
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VULKAN_VERSION}/llama-${LEMONADE_LLAMACPP_VULKAN_VERSION}-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
 RUN    mkdir -p /lemonade/bin/llamacpp/vulkan \
     && tar -xvf llama.tar.gz --strip-components=1 -C /lemonade/bin/llamacpp/vulkan \
@@ -45,7 +45,7 @@ RUN    mkdir -p /lemonade/bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
-ARG LEMONADE_LLAMACPP_VERSION=b1198
+ARG LEMONADE_LLAMACPP_VERSION=b1215
 ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/${LEMONADE_LLAMACPP_VERSION}/llama-${LEMONADE_LLAMACPP_VERSION}-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
 RUN    mkdir -p /lemonade/bin/llamacpp/rocm \
     && unzip llama-rocm.zip -d /lemonade/bin/llamacpp/rocm \
@@ -58,8 +58,8 @@ RUN    mkdir -p /lemonade/bin/whisper \
     && chown -R lemonade-runtime:users /lemonade/bin/whisper
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=636d3cb
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-504-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp.zip
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=862a658
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-533-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp.zip
 RUN    mkdir -p /lemonade/bin/sd-cpp \
     && chown -R lemonade-runtime:users /lemonade/bin/sd-cpp \
     && unzip sd-cpp.zip -d /lemonade/bin/sd-cpp \
