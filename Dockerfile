@@ -63,8 +63,19 @@ RUN    mkdir -p /lemonade/bin/llamacpp/cpu \
     && rm -f llama-cpu.tar.gz
 
 USER root
-RUN    mkdir -p /lemonade/bin/whisper \
-    && chown -R lemonade-runtime:users /lemonade/bin/whisper
+ARG LEMONADE_WHISPER_VERSION=v1.8.2
+ADD https://github.com/lemonade-sdk/whisper.cpp-builds/releases/download/${LEMONADE_WHISPER_VERSION}/whisper-${LEMONADE_WHISPER_VERSION}-linux-vulkan-x86_64.tar.gz  whisper-vulkan.tar.gz
+RUN    mkdir -p /lemonade/bin/whispercpp/vulkan \
+    && chown -R lemonade-runtime:users /lemonade/bin/whispercpp/vulkan \
+    && tar -xvf whisper-vulkan.tar.gz --strip-components=1 -C /lemonade/bin/whispercpp/vulkan \
+    && chmod +x /lemonade/bin/whispercpp/vulkan/whisper* \
+    && rm -f whisper-vulkan.tar.gz
+ADD https://github.com/lemonade-sdk/whisper.cpp-builds/releases/download/${LEMONADE_WHISPER_VERSION}/whisper-${LEMONADE_WHISPER_VERSION}-linux-cpu-x86_64.tar.gz  whisper-cpu.tar.gz
+RUN    mkdir -p /lemonade/bin/whispercpp/cpu \
+    && chown -R lemonade-runtime:users /lemonade/bin/whispercpp/cpu \
+    && tar -xvf whisper-cpu.tar.gz --strip-components=1 -C /lemonade/bin/whispercpp/cpu \
+    && chmod +x /lemonade/bin/whispercpp/cpu/whisper* \
+    && rm -f whisper-cpu.tar.gz
 
 USER root
 ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=862a658
