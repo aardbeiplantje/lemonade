@@ -54,17 +54,35 @@ RUN    mkdir -p /lemonade/bin/llamacpp/rocm \
     && rm -f llama-rocm.zip
 
 USER root
+ARG LLAMACPP_CPU_VERSION=b8175
+ADD https://github.com/ggml-org/llama.cpp/releases/download/${LLAMACPP_CPU_VERSION}/llama-${LLAMACPP_CPU_VERSION}-bin-ubuntu-x64.tar.gz llama-cpu.tar.gz
+RUN    mkdir -p /lemonade/bin/llamacpp/cpu \
+    && tar -xvf llama-cpu.tar.gz --strip-components=1 -C /lemonade/bin/llamacpp/cpu \
+    && chmod +x /lemonade/bin/llamacpp/cpu/llama* \
+    && chown -R lemonade-runtime:users /lemonade/bin/llamacpp/cpu \
+    && rm -f llama-cpu.tar.gz
+
+USER root
 RUN    mkdir -p /lemonade/bin/whisper \
     && chown -R lemonade-runtime:users /lemonade/bin/whisper
 
 USER root
 ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=862a658
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-533-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp.zip
-RUN    mkdir -p /lemonade/bin/sd-cpp \
-    && chown -R lemonade-runtime:users /lemonade/bin/sd-cpp \
-    && unzip sd-cpp.zip -d /lemonade/bin/sd-cpp \
-    && chmod +x /lemonade/bin/sd-cpp/sd* \
-    && rm -f sd-cpp.zip
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-533-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
+RUN    mkdir -p /lemonade/bin/sd-cpp/cpu \
+    && chown -R lemonade-runtime:users /lemonade/bin/sd-cpp/cpu \
+    && unzip sd-cpp-cpu.zip -d /lemonade/bin/sd-cpp/cpu \
+    && chmod +x /lemonade/bin/sd-cpp/cpu/* \
+    && rm -f sd-cpp-cpu.zip
+
+USER root
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=862a658
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-533-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-rocm.zip sd-cpp-rocm.zip
+RUN    mkdir -p /lemonade/bin/sd-cpp/rocm \
+    && chown -R lemonade-runtime:users /lemonade/bin/sd-cpp/rocm \
+    && unzip sd-cpp-rocm.zip -d /lemonade/bin/sd-cpp/rocm \
+    && chmod +x /lemonade/bin/sd-cpp/rocm/* \
+    && rm -f sd-cpp-rocm.zip
 
 COPY llamacpp_presets.ini /lemonade/llamacpp_presets.ini
 
@@ -76,7 +94,7 @@ ENV LEMONADE_LLAMACPP=rocm
 ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
 ENV LEMONADE_HOST=::
 ENV LEMONADE_PORT=8000
-ENV LEMONADE_LOG_LEVEL=info
+ENV LEMONADE_LOG_LEVEL=debug
 ENV LEMONADE_CTX_SIZE=0
 ENV LEMONADE_ENABLE_DGPU_GTT=1
 ENV LEMONADE_DISABLE_MODEL_FILTERING=0
