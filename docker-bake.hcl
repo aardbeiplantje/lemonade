@@ -48,7 +48,7 @@ target "containers" {
   platforms = [
     "linux/amd64"
   ]
-  environment = {
+  args = {
     CACHEBUST = "1"
   }
 }

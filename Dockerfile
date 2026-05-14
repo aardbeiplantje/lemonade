@@ -1,7 +1,7 @@
 FROM debian:trixie-slim AS runtime
 WORKDIR /tmp
-ARG LEMONADE_VERSION=10.0.0
-ADD https://github.com/lemonade-sdk/lemonade/releases/latest/download/lemonade-server_${LEMONADE_VERSION}_amd64.deb lemonade.deb
+ARG LEMONADE_VERSION=10.4.0
+ADD https://github.com/lemonade-sdk/lemonade/releases/download/v${LEMONADE_VERSION}/lemonade-embeddable-${LEMONADE_VERSION}-ubuntu-x64.tar.gz lemonade.tgz
 RUN apt update && apt install -y --no-install-recommends \
     ca-certificates \
     libcurl4 \
@@ -18,7 +18,7 @@ RUN apt update && apt install -y --no-install-recommends \
     fonts-katex \
     libgomp1 \
     && rm -rf /var/lib/apt/lists/*
-RUN dpkg -i lemonade.deb && rm -f lemonade.deb
+RUN tar xvzf lemonade.tgz && rm -f lemonade.tgz
 
 ARG CACHEBUST=1
 RUN apt update && apt upgrade -y \
