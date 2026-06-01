@@ -1,11 +1,14 @@
 group "default" {
-  targets = ["release"]
+  targets = ["local"]
+}
+group "local" {
+  targets = ["_local"]
 }
 group "release" {
   targets = ["containers"]
 }
 variable "DOCKER_REGISTRY" {
-  default = "ghcr.io"
+  default = "local"
 }
 variable "DOCKER_REPOSITORY" {
   default = "ai"
@@ -16,6 +19,25 @@ variable "DOCKER_IMAGE_NAME" {
 variable "DOCKER_TAG" {
   default = "latest"
 }
+target "_common" {
+  context = "."
+  dockerfile = "Dockerfile"
+  platforms = ["linux/amd64"]
+  networks = ["host"]
+  buildkit = true
+}
+
+target "_local" {
+  inherits = ["_common"]
+  target = "runtime"
+  tags = [
+    "local/${DOCKER_REPOSITORY}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}",
+  ]
+  output = [
+    "type=docker,name=local/${DOCKER_REPOSITORY}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}"
+  ]
+}
+
 target "containers" {
   pull = true
   name = "containers-${env}"
