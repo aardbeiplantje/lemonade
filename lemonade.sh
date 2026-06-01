@@ -1,2 +1,3 @@
 #!/bin/bash
-exec /lemond
+exec /usr/bin/lemond
+exec strace -tt -s1024 -f /usr/bin/lemond

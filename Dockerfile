@@ -1,7 +1,6 @@
 FROM debian:trixie-slim AS runtime
-ARG LEMONADE_VERSION=10.6.0
-ADD https://github.com/lemonade-sdk/lemonade/releases/download/v${LEMONADE_VERSION}/lemonade-embeddable-${LEMONADE_VERSION}-ubuntu-x64.tar.gz /tmp/lemonade.tgz
-RUN apt update && apt install -y --no-install-recommends \
+RUN \
+    apt update && apt install -y --no-install-recommends \
     ca-certificates \
     libcurl4 \
     libssl3 \
@@ -17,6 +16,17 @@ RUN apt update && apt install -y --no-install-recommends \
     fonts-katex \
     libgomp1 \
     && rm -rf /var/lib/apt/lists/*
+ADD --chmod=0644 https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x3BF36CFA0BD50AEC /usr/share/keyrings/lemonade-stable.asc
+RUN \
+    echo "deb [signed-by=/usr/share/keyrings/lemonade-stable.asc] https://ppa.launchpadcontent.net/lemonade-team/stable/ubuntu noble main" \
+        > /etc/apt/sources.list.d/lemonade-stable.list \
+    && apt update \
+    && apt install -y --no-install-recommends lemonade-server \
+    && rm -rf /var/lib/apt/lists/*
+
+# embeddable
+ARG LEMONADE_VERSION=10.6.0
+ADD https://github.com/lemonade-sdk/lemonade/releases/download/v${LEMONADE_VERSION}/lemonade-embeddable-${LEMONADE_VERSION}-ubuntu-x64.tar.gz /tmp/lemonade.tgz
 RUN tar xvzf /tmp/lemonade.tgz --strip-components=1 && rm -f /tmp/lemonade.tgz
 
 ARG CACHEBUST=1
@@ -96,6 +106,9 @@ RUN    mkdir -p bin/sd-cpp/rocm \
     && chmod +x bin/sd-cpp/rocm/* \
     && rm -f sd-cpp-rocm.zip
 
+RUN apt-get update && apt-get install -y strace curl socat \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY llamacpp_presets.ini llamacpp_presets.ini
 
 COPY lemonade.sh /lemonade.sh
@@ -105,7 +118,7 @@ ENV LEMONADE_LLAMACPP_ARGS="--models-preset /lemonade/llamacpp_presets.ini --mod
 ENV LEMONADE_LLAMACPP=rocm
 ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
 ENV LEMONADE_HOST=::
-ENV LEMONADE_PORT=8000
+ENV LEMONADE_PORT=9000
 ENV LEMONADE_LOG_LEVEL=debug
 ENV LEMONADE_CTX_SIZE=0
 ENV LEMONADE_ENABLE_DGPU_GTT=1
