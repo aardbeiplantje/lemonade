@@ -27,7 +27,7 @@ exec docker run --rm \
     --group-add=109 \
     --group-add=992 \
     --group-add=1000 \
-    -v lemonade-flm-models:/lemonade-server//.config/flm/models \
+    -v lemonade-flm-models:/lemonade-server/.config/flm/models:rw \
     ${DOCKER_IMAGE} \
         $*
 
