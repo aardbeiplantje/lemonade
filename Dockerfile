@@ -152,8 +152,17 @@ RUN apt update -y && apt install -y \
 ADD https://github.com/FastFlowLM/FastFlowLM/releases/download/v0.9.43/fastflowlm_0.9.43_ubuntu24.04_amd64.deb flm.deb
 RUN dpkg -i flm.deb && rm flm.deb
 
-RUN apt-get update && apt-get install -y strace curl socat \
+RUN apt-get update && apt-get install -y strace curl socat libvulkan1 \
     && rm -rf /var/lib/apt/lists/*
+
+# SD needs TheRock
+## ADD https://repo.amd.com/rocm/tarball/therock-dist-linux-gfx1151-7.13.0.tar.gz /therock.tar.gz
+## RUN mkdir -p /opt/rocm \
+##     && cd /opt/rocm \
+##     && tar xzf /therock.tar.gz \
+##     && rm -f /therock.tar.gz
+RUN mkdir -p /lemonade-server//.cache/lemonade/bin/therock/ && \
+    ln -s /opt/rocm /lemonade-server//.cache/lemonade/bin/therock/gfx1151-7.13.0
 
 COPY llamacpp_presets.ini llamacpp_presets.ini
 

@@ -15,6 +15,7 @@ if [ ! -z "$LEMONADE_FLM_MODELS_DIR" ]; then
 else
     extra_args="$extra_args -v lemonade-flm-models:/lemonade-server/.config/flm/models:rw"
 fi
+ROCM_PATH=${ROCM_PATH:-/opt/rocm}
 docker stop lemonade >/dev/null 2>&1 || true
 docker rm   lemonade >/dev/null 2>&1 || true
 exec docker run --rm \
@@ -34,6 +35,8 @@ exec docker run --rm \
     --group-add=109 \
     --group-add=992 \
     --group-add=$(id -g) \
+    -e ROCM_PATH=/opt/rocm \
+    -v $ROCM_PATH:/opt/rocm:ro \
     ${DOCKER_IMAGE} \
         $*
 
