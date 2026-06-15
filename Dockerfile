@@ -1,4 +1,4 @@
-FROM debian:trixie-slim AS runtime
+FROM ubuntu:24.04 AS runtime
 RUN \
     apt update && apt install -y --no-install-recommends \
     ca-certificates \
@@ -15,6 +15,7 @@ RUN \
     libsecret-1-0 \
     fonts-katex \
     libgomp1 \
+    libmbedcrypto7t64 \
     && rm -rf /var/lib/apt/lists/*
 ADD --chmod=0644 https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x3BF36CFA0BD50AEC /usr/share/keyrings/lemonade-stable.asc
 RUN \
@@ -25,7 +26,7 @@ RUN \
     && rm -rf /var/lib/apt/lists/*
 
 # embeddable
-ARG LEMONADE_VERSION=10.6.0
+ARG LEMONADE_VERSION=10.7.0
 ADD https://github.com/lemonade-sdk/lemonade/releases/download/v${LEMONADE_VERSION}/lemonade-embeddable-${LEMONADE_VERSION}-ubuntu-x64.tar.gz /tmp/lemonade.tgz
 RUN tar xvzf /tmp/lemonade.tgz --strip-components=1 && rm -f /tmp/lemonade.tgz
 
@@ -35,7 +36,7 @@ RUN apt update && apt upgrade -y \
 
 WORKDIR /abc
 WORKDIR /lemonade-server
-RUN useradd -N -M -d /lemonade-server/ -u 1000 lemonade-runtime
+RUN useradd -N -M -d /lemonade-server/ -u 1001 lemonade-runtime
 RUN mkdir -p /models      && chown -R lemonade-runtime:users /models
 RUN mkdir -p /hf          && chown -R lemonade-runtime:users /hf
 
@@ -48,7 +49,7 @@ RUN    mkdir -p .cache \
 
 WORKDIR /abc
 USER root
-ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9451
+ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9642
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VULKAN_VERSION}/llama-${LEMONADE_LLAMACPP_VULKAN_VERSION}-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
 RUN    mkdir -p bin/llamacpp/vulkan \
     && tar -xvf llama.tar.gz --strip-components=1 -C bin/llamacpp/vulkan \
@@ -56,7 +57,7 @@ RUN    mkdir -p bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
-ARG LEMONADE_LLAMACPP_VERSION=b1285
+ARG LEMONADE_LLAMACPP_VERSION=b1292
 ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/${LEMONADE_LLAMACPP_VERSION}/llama-${LEMONADE_LLAMACPP_VERSION}-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
 RUN    mkdir -p bin/llamacpp/rocm \
     && unzip llama-rocm.zip -d bin/llamacpp/rocm \
@@ -65,7 +66,7 @@ RUN    mkdir -p bin/llamacpp/rocm \
     && rm -f llama-rocm.zip
 
 USER root
-ARG LLAMACPP_CPU_VERSION=b9451
+ARG LLAMACPP_CPU_VERSION=b9642
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LLAMACPP_CPU_VERSION}/llama-${LLAMACPP_CPU_VERSION}-bin-ubuntu-x64.tar.gz llama-cpu.tar.gz
 RUN    mkdir -p bin/llamacpp/cpu \
     && tar -xvf llama-cpu.tar.gz --strip-components=1 -C bin/llamacpp/cpu \
@@ -89,8 +90,8 @@ RUN    mkdir -p bin/whispercpp/cpu \
     && rm -f whisper-cpu.tar.gz
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=be65ac7
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-663-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=bb90bfa
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-703-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
 RUN    mkdir -p bin/sd-cpp/cpu \
     && chown -R lemonade-runtime:users bin/sd-cpp/cpu \
     && unzip sd-cpp-cpu.zip -d bin/sd-cpp/cpu \
@@ -98,8 +99,8 @@ RUN    mkdir -p bin/sd-cpp/cpu \
     && rm -f sd-cpp-cpu.zip
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=be65ac7
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-663-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-rocm-7.13.0.zip sd-cpp-rocm.zip
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=bb90bfa
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-703-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-rocm-7.13.0.zip sd-cpp-rocm.zip
 RUN    mkdir -p bin/sd-cpp/rocm \
     && chown -R lemonade-runtime:users bin/sd-cpp/rocm \
     && unzip sd-cpp-rocm.zip -d bin/sd-cpp/rocm \
