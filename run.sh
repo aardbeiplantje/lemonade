@@ -29,12 +29,16 @@ exec docker run --rm \
     --device=/dev/accel \
     --group-add=video \
     --ipc=host \
-    --shm-size=128GB \
+    --ulimit memlock=-1:-1 \
+    --ulimit stack=67108864:67108864 \
     --cap-add=SYS_PTRACE \
     --security-opt seccomp=unconfined \
     --group-add=109 \
+    --group-add=986 \
     --group-add=992 \
     --group-add=$(id -g) \
+    --tmpfs /tmp:rw,suid,exec,size=2G \
+    --tmpfs /var/tmp:rw,suid,exec,size=1G \
     -e ROCM_PATH=/opt/rocm \
     -v $ROCM_PATH:/opt/rocm:ro \
     ${DOCKER_IMAGE} \
