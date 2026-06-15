@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export XDG_RUNTIME_DIR=/lemonade-server/.cache/lemonade/
-
 if [ "$1" = "bash" ] || [ "$1" = "/bin/bash" ]; then
     exec "$@"
 fi
