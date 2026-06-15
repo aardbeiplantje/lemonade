@@ -14,7 +14,7 @@ variable "DOCKER_REPOSITORY" {
   default = "ai"
 }
 variable "DOCKER_IMAGE_NAME" {
-  default = "lemonade"
+  default = "lemonade-gfx1151"
 }
 variable "DOCKER_TAG" {
   default = "latest"

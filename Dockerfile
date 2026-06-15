@@ -49,10 +49,10 @@ RUN    mkdir -p .cache \
 
 WORKDIR /abc
 USER root
-ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9642
+ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9585
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VULKAN_VERSION}/llama-${LEMONADE_LLAMACPP_VULKAN_VERSION}-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
 RUN    mkdir -p bin/llamacpp/vulkan \
-    && tar -xvf llama.tar.gz --strip-components=1 -C bin/llamacpp/vulkan \
+    && tar -xzf llama.tar.gz --strip-components=1 -C bin/llamacpp/vulkan \
     && chown -R lemonade-runtime:users bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
@@ -66,10 +66,10 @@ RUN    mkdir -p bin/llamacpp/rocm-stable \
     && rm -f llama-rocm.zip
 
 USER root
-ARG LLAMACPP_CPU_VERSION=b9642
+ARG LLAMACPP_CPU_VERSION=b9585
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LLAMACPP_CPU_VERSION}/llama-${LLAMACPP_CPU_VERSION}-bin-ubuntu-x64.tar.gz llama-cpu.tar.gz
 RUN    mkdir -p bin/llamacpp/cpu \
-    && tar -xvf llama-cpu.tar.gz --strip-components=1 -C bin/llamacpp/cpu \
+    && tar -xzf llama-cpu.tar.gz --strip-components=1 -C bin/llamacpp/cpu \
     && chmod +x bin/llamacpp/cpu/llama* \
     && chown -R lemonade-runtime:users bin/llamacpp/cpu \
     && rm -f llama-cpu.tar.gz
@@ -79,19 +79,19 @@ ARG LEMONADE_WHISPER_VERSION=v1.8.4
 ADD https://github.com/lemonade-sdk/whisper.cpp-builds/releases/download/${LEMONADE_WHISPER_VERSION}/whisper-${LEMONADE_WHISPER_VERSION}-linux-vulkan-x86_64.tar.gz  whisper-vulkan.tar.gz
 RUN    mkdir -p bin/whispercpp/vulkan \
     && chown -R lemonade-runtime:users bin/whispercpp/vulkan \
-    && tar -xvf whisper-vulkan.tar.gz --strip-components=1 -C bin/whispercpp/vulkan \
+    && tar -xzf whisper-vulkan.tar.gz --strip-components=1 -C bin/whispercpp/vulkan \
     && chmod +x bin/whispercpp/vulkan/whisper* \
     && rm -f whisper-vulkan.tar.gz
 ADD https://github.com/lemonade-sdk/whisper.cpp-builds/releases/download/${LEMONADE_WHISPER_VERSION}/whisper-${LEMONADE_WHISPER_VERSION}-linux-cpu-x86_64.tar.gz  whisper-cpu.tar.gz
 RUN    mkdir -p bin/whispercpp/cpu \
     && chown -R lemonade-runtime:users bin/whispercpp/cpu \
-    && tar -xvf whisper-cpu.tar.gz --strip-components=1 -C bin/whispercpp/cpu \
+    && tar -xzf whisper-cpu.tar.gz --strip-components=1 -C bin/whispercpp/cpu \
     && chmod +x bin/whispercpp/cpu/whisper* \
     && rm -f whisper-cpu.tar.gz
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=bb90bfa
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-703-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=1f9ee88
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-672-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
 RUN    mkdir -p bin/sd-cpp/cpu \
     && chown -R lemonade-runtime:users bin/sd-cpp/cpu \
     && unzip sd-cpp-cpu.zip -d bin/sd-cpp/cpu \
@@ -99,13 +99,31 @@ RUN    mkdir -p bin/sd-cpp/cpu \
     && rm -f sd-cpp-cpu.zip
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=bb90bfa
-ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-703-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-rocm-7.13.0.zip sd-cpp-rocm.zip
-RUN    mkdir -p bin/sd-cpp/rocm \
-    && chown -R lemonade-runtime:users bin/sd-cpp/rocm \
-    && unzip sd-cpp-rocm.zip -d bin/sd-cpp/rocm \
-    && chmod +x bin/sd-cpp/rocm/* \
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=1f9ee88
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-672-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-rocm-7.13.0.zip sd-cpp-rocm.zip
+RUN    mkdir -p bin/sd-cpp/rocm-stable \
+    && chown -R lemonade-runtime:users bin/sd-cpp/rocm-stable \
+    && unzip sd-cpp-rocm.zip -d bin/sd-cpp/rocm-stable \
+    && chmod +x bin/sd-cpp/rocm-stable/* \
     && rm -f sd-cpp-rocm.zip
+
+USER root
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=1f9ee88
+ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/master-672-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64-vulkan.zip sd-cpp-vulkan.zip
+RUN    mkdir -p bin/sd-cpp/vulkan  \
+    && chown -R lemonade-runtime:users bin/sd-cpp/vulkan \
+    && unzip sd-cpp-vulkan.zip -d bin/sd-cpp/vulkan \
+    && chmod +x bin/sd-cpp/vulkan/* \
+    && rm -f sd-cpp-vulkan.zip
+
+USER root
+ARG LEMONADE_KOKOROS_VERSION=b17
+ADD https://github.com/lemonade-sdk/Kokoros/releases/download/${LEMONADE_KOKOROS_VERSION}/kokoros-linux-x86_64.tar.gz kokoro-cpu.tar.gz
+RUN    mkdir -p bin/kokoro/cpu  \
+    && chown -R lemonade-runtime:users bin/kokoro/cpu \
+    && tar -xzf kokoro-cpu.tar.gz --strip-components=1 -C bin/kokoro/cpu \
+    && chmod +x bin/kokoro/cpu/* \
+    && rm -f kokoro-cpu.tar.gz
 
 USER root
 RUN apt update -y && apt install -y \
