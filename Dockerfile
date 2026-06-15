@@ -59,10 +59,10 @@ RUN    mkdir -p bin/llamacpp/vulkan \
 USER root
 ARG LEMONADE_LLAMACPP_VERSION=b1292
 ADD https://github.com/lemonade-sdk/llamacpp-rocm/releases/download/${LEMONADE_LLAMACPP_VERSION}/llama-${LEMONADE_LLAMACPP_VERSION}-ubuntu-rocm-gfx1151-x64.zip llama-rocm.zip
-RUN    mkdir -p bin/llamacpp/rocm \
-    && unzip llama-rocm.zip -d bin/llamacpp/rocm \
-    && chmod +x bin/llamacpp/rocm/llama* \
-    && chown -R lemonade-runtime:users bin/llamacpp/rocm \
+RUN    mkdir -p bin/llamacpp/rocm-stable \
+    && unzip llama-rocm.zip -d bin/llamacpp/rocm-stable \
+    && chmod +x bin/llamacpp/rocm-stable/llama* \
+    && chown -R lemonade-runtime:users bin/llamacpp/rocm-stable \
     && rm -f llama-rocm.zip
 
 USER root
@@ -106,6 +106,23 @@ RUN    mkdir -p bin/sd-cpp/rocm \
     && unzip sd-cpp-rocm.zip -d bin/sd-cpp/rocm \
     && chmod +x bin/sd-cpp/rocm/* \
     && rm -f sd-cpp-rocm.zip
+
+USER root
+RUN apt update -y && apt install -y \
+        libavcodec60 \
+        libavformat60 \
+        libavutil58 \
+        libboost-program-options1.83.0 \
+        libfftw3-single3 \
+        libreadline8t64 \
+        libswresample4 \
+        libswscale7 \
+        libxrt2 \
+        libxrt-npu2 \
+    && rm -rf /var/lib/apt/lists/*
+
+ADD https://github.com/FastFlowLM/FastFlowLM/releases/download/v0.9.43/fastflowlm_0.9.43_ubuntu24.04_amd64.deb flm.deb
+RUN dpkg -i flm.deb
 
 RUN apt-get update && apt-get install -y strace curl socat \
     && rm -rf /var/lib/apt/lists/*
