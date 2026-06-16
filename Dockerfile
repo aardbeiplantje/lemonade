@@ -167,18 +167,11 @@ RUN mkdir -p /lemonade-server//.cache/lemonade/bin/therock/ && \
 COPY llamacpp_presets.ini llamacpp_presets.ini
 
 COPY lemonade.sh /lemonade.sh
+COPY lemonade_setup.sh /lemonade_setup.sh
 USER lemonade-runtime
 WORKDIR /lemonade-server
-ENV LEMONADE_LLAMACPP_ARGS="--models-preset /lemonade/llamacpp_presets.ini --models-dir /models/ --no-webui"
-ENV LEMONADE_LLAMACPP=rocm
-ENV LEMONADE_STABLEDIFFUSIONCPP=vulkan
-ENV LEMONADE_HOST=::
-ENV LEMONADE_PORT=9000
-ENV LEMONADE_LOG_LEVEL=debug
-ENV LEMONADE_CTX_SIZE=0
-ENV LEMONADE_ENABLE_DGPU_GTT=1
-ENV LEMONADE_DISABLE_MODEL_FILTERING=0
-ENV LEMONADE_EXTRA_MODELS_DIR=/models
+COPY config.json /abc/config.json
+
 ENV TMPDIR=/dev/shm
 ENV HF_HUB_ENABLE_HF_TRANSFER=1
 ENV HF_HUB_ENABLE_HF_TRANSFER=0
