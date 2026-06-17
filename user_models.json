@@ -1,1 +1,11 @@
-{}
+{
+  "embeddinggemma-300m-GGUF-Q8_0": {
+    "checkpoint": "unsloth/embeddinggemma-300m-GGUF:Q8_0",
+    "labels": [
+      "custom",
+      "embeddings"
+    ],
+    "recipe": "llamacpp",
+    "suggested": true
+  }
+}

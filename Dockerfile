@@ -165,7 +165,8 @@ RUN mkdir -p /lemonade-server//.cache/lemonade/bin/therock/ && \
     ln -s /opt/rocm /lemonade-server//.cache/lemonade/bin/therock/gfx1151-7.13.0
 
 COPY llamacpp_presets.ini /llamacpp_presets.ini
-COPY user_models.json /abc/user_models.json
+COPY user_models.json /abc/
+COPY recipe_options.json /abc/
 
 COPY lemonade.sh /lemonade.sh
 COPY lemonade_setup.sh /lemonade_setup.sh
