@@ -2,6 +2,10 @@
   "user.embeddinggemma-300m-GGUF-Q8_0": {
     "llamacpp_args": "--ubatch-size 8192 --batch-size 8192",
     "llamacpp_backend": "rocm",
-    "merge_args": true
+    "merge_args": true,
+    "env": {
+      "OMP_WAIT_POLICY": "PASSIVE",
+      "GOMP_SPINCOUNT": "0"
+    }
   }
 }
