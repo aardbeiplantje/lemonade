@@ -21,6 +21,7 @@ docker rm   lemonade >/dev/null 2>&1 || true
 exec docker run --rm \
     --detach \
     --name lemonade \
+    --privileged \
     --network=host \
     -v $HF_HOME:/hf:rw \
     $extra_args \
@@ -28,18 +29,20 @@ exec docker run --rm \
     --device=/dev/dri \
     --device=/dev/accel \
     --group-add=video \
+    --group-add=226 \
     --ipc=host \
     --ulimit memlock=-1:-1 \
     --ulimit stack=67108864:67108864 \
     --cap-add=SYS_PTRACE \
+    --cap-add=SYS_ADMIN \
     --security-opt seccomp=unconfined \
     --group-add=109 \
     --group-add=986 \
     --group-add=992 \
     --group-add=$(id -g) \
-    --tmpfs /tmp:rw,suid,exec,size=2G \
-    --tmpfs /var/tmp:rw,suid,exec,size=1G \
+    --shm-size=128GB \
     -e ROCM_PATH=/opt/rocm \
+    -v llama.cpp-data:/llama.cpp:rw \
     -v $ROCM_PATH:/opt/rocm:ro \
     ${DOCKER_IMAGE} \
         $*

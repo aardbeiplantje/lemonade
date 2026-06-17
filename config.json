@@ -1,8 +1,8 @@
 {
   "config_version": 1,
-  "ctx_size": 1000000,
+  "ctx_size": 262144,
   "disable_model_filtering": false,
-  "enable_dgpu_gtt": true,
+  "enable_dgpu_gtt": false,
   "extra_models_dir": "/models",
   "flm": {
     "args": ""
@@ -13,7 +13,7 @@
     "cpu_bin": "builtin"
   },
   "llamacpp": {
-    "args": "",
+    "args": "--models-preset /llamacpp_presets.ini",
     "backend": "rocm",
     "cpu_args": "",
     "cpu_bin": "builtin",
