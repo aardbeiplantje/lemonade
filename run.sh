@@ -44,6 +44,7 @@ exec docker run --rm \
     -e ROCM_PATH=/opt/rocm \
     -v llama.cpp-data:/llama.cpp:rw \
     -v $ROCM_PATH:/opt/rocm:ro \
+    ${DOCKER_OPTS} \
     ${DOCKER_IMAGE} \
         $*
 

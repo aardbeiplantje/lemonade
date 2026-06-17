@@ -165,12 +165,16 @@ RUN mkdir -p /lemonade-server//.cache/lemonade/bin/therock/ && \
     ln -s /opt/rocm /lemonade-server//.cache/lemonade/bin/therock/gfx1151-7.13.0
 
 COPY llamacpp_presets.ini /llamacpp_presets.ini
+COPY user_models.json /abc/user_models.json
 
 COPY lemonade.sh /lemonade.sh
 COPY lemonade_setup.sh /lemonade_setup.sh
 USER lemonade-runtime
 WORKDIR /lemonade-server
+RUN mkdir -p /lemonade-server/.cache/lemonade/lemonade
 COPY config.json /abc/config.json
+
+VOLUME /abc/lemonade
 
 ENV TMPDIR=/dev/shm
 ENV HF_HUB_ENABLE_HF_TRANSFER=1
