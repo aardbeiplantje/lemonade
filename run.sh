@@ -21,7 +21,6 @@ docker rm   lemonade >/dev/null 2>&1 || true
 exec docker run --rm \
     --detach \
     --name lemonade \
-    --privileged \
     --network=host \
     -v $HF_HOME:/hf:rw \
     $extra_args \
@@ -40,7 +39,8 @@ exec docker run --rm \
     --group-add=986 \
     --group-add=992 \
     --group-add=$(id -g) \
-    --shm-size=128GB \
+    --tmpfs /tmp:rw,suid,exec,size=1G \
+    --tmpfs /var/tmp:rw,suid,exec,size=1G \
     -e ROCM_PATH=/opt/rocm \
     -v llama.cpp-data:/llama.cpp:rw \
     -v $ROCM_PATH:/opt/rocm:ro \
