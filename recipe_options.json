@@ -1,7 +1,6 @@
 {
   "user.embeddinggemma-300m-GGUF-Q8_0": {
-    "ctx_size": 4096,
-    "llamacpp_args": "--ubatch-size 4096 --batch-size 4096",
+    "llamacpp_args": "--ubatch-size 8192 --batch-size 8192",
     "llamacpp_backend": "rocm",
     "merge_args": true
   }
