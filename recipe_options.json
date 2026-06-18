@@ -3,6 +3,7 @@
     "llamacpp_args": "--ubatch-size 8192 --batch-size 8192",
     "llamacpp_backend": "rocm",
     "merge_args": true,
+    "keepalive": "10s",
     "env": {
       "OMP_WAIT_POLICY": "PASSIVE",
       "GOMP_SPINCOUNT": "0"
