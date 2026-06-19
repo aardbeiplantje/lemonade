@@ -42,7 +42,7 @@ exec docker run --rm \
     --tmpfs /tmp:rw,suid,exec,size=1G \
     --tmpfs /var/tmp:rw,suid,exec,size=1G \
     -e ROCM_PATH=/opt/rocm \
-    -v llama.cpp-data:/llama.cpp:rw \
+    -v lemonade-llama.cpp-data:/llama.cpp:rw \
     -v $ROCM_PATH:/opt/rocm:ro \
     ${DOCKER_OPTS} \
     ${DOCKER_IMAGE} \
