@@ -1,12 +1,14 @@
 {
   "user.embeddinggemma-300m-GGUF-Q8_0": {
+    "ctx_size": "2048",
     "llamacpp_args": "--ubatch-size 8192 --batch-size 8192",
     "llamacpp_backend": "rocm",
     "merge_args": true,
     "keepalive": "10s",
     "env": {
       "OMP_WAIT_POLICY": "PASSIVE",
-      "GOMP_SPINCOUNT": "0"
+      "GOMP_SPINCOUNT": "0",
+      "GPU_MAX_HW_QUEUES": "1"
     }
   }
 }
