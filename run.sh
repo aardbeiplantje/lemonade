@@ -17,7 +17,6 @@ else
 fi
 ROCM_PATH=${ROCM_PATH:-/opt/rocm}
 docker stop lemonade >/dev/null 2>&1 || true
-docker rm   lemonade >/dev/null 2>&1 || true
 exec docker run --rm \
     --detach \
     --name lemonade \
