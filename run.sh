@@ -17,6 +17,10 @@ else
 fi
 ROCM_PATH=${ROCM_PATH:-/opt/rocm}
 docker stop lemonade >/dev/null 2>&1 || true
+while [ "$(docker ps -a -q -f name=^lemonade$)" ]; do
+    docker rm lemonade >/dev/null 2>&1 || true
+    sleep 1
+done
 exec docker run --rm \
     --detach \
     --name lemonade \
