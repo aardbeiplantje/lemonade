@@ -49,7 +49,7 @@ RUN    mkdir -p .cache \
 
 WORKDIR /abc
 USER root
-ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9585
+ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9631
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VULKAN_VERSION}/llama-${LEMONADE_LLAMACPP_VULKAN_VERSION}-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
 RUN    mkdir -p bin/llamacpp/vulkan \
     && tar -xzf llama.tar.gz --strip-components=1 -C bin/llamacpp/vulkan \
@@ -58,7 +58,7 @@ RUN    mkdir -p bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
-ARG LEMONADE_LLAMACPP_VERSION=b9586
+ARG LEMONADE_LLAMACPP_VERSION=b9631
 ADD https://github.com/lemonade-sdk/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VERSION}/llama-${LEMONADE_LLAMACPP_VERSION}-bin-ubuntu-rocm-7.13-x64.tar.gz llama-rocm.tar.gz
 RUN    mkdir -p bin/llamacpp/rocm-stable \
     && tar -xzf llama-rocm.tar.gz --strip-components=1 -C bin/llamacpp/rocm-stable \
@@ -68,7 +68,7 @@ RUN    mkdir -p bin/llamacpp/rocm-stable \
     && rm -f llama-rocm.tar.gz
 
 USER root
-ARG LLAMACPP_CPU_VERSION=b9585
+ARG LLAMACPP_CPU_VERSION=b9631
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LLAMACPP_CPU_VERSION}/llama-${LLAMACPP_CPU_VERSION}-bin-ubuntu-x64.tar.gz llama-cpu.tar.gz
 RUN    mkdir -p bin/llamacpp/cpu \
     && tar -xzf llama-cpu.tar.gz --strip-components=1 -C bin/llamacpp/cpu \
