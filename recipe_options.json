@@ -13,7 +13,7 @@
   },
   "extra.NVIDIA-Nemotron-3-Super-120B-A12B-UD-Q4_K_XL-00001-of-00003": {
     "ctx_size": 1048576,
-    "llamacpp_args": "--ubatch-size 512 --swa-full",
+    "llamacpp_args": "--ubatch-size 512 --swa-full --parallel 4 --kv-unified",
     "llamacpp_backend": "rocm",
     "merge_args": true,
     "keepalive": "10s",
