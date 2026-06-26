@@ -26,6 +26,9 @@ exec docker run --rm \
     --name lemonade \
     --network=host \
     -v $HF_HOME:/hf:rw \
+    -e HF_HOME=/hf \
+    -e HF_TOKEN \
+    -e HF_HUB_CACHE=/hf/hub \
     $extra_args \
     --device=/dev/kfd \
     --device=/dev/dri \
