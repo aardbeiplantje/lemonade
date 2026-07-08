@@ -26,7 +26,7 @@ RUN \
     && rm -rf /var/lib/apt/lists/*
 
 # embeddable
-ARG LEMONADE_VERSION=10.7.0
+ARG LEMONADE_VERSION=10.9.0
 ADD https://github.com/lemonade-sdk/lemonade/releases/download/v${LEMONADE_VERSION}/lemonade-embeddable-${LEMONADE_VERSION}-ubuntu-x64.tar.gz /tmp/lemonade.tgz
 RUN tar xvzf /tmp/lemonade.tgz --strip-components=1 && rm -f /tmp/lemonade.tgz
 
