@@ -49,7 +49,7 @@ RUN    mkdir -p .cache \
 
 WORKDIR /abc
 USER root
-ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9752
+ARG LEMONADE_LLAMACPP_VULKAN_VERSION=b9747
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VULKAN_VERSION}/llama-${LEMONADE_LLAMACPP_VULKAN_VERSION}-bin-ubuntu-vulkan-x64.tar.gz llama.tar.gz
 RUN    mkdir -p bin/llamacpp/vulkan \
     && tar -xzf llama.tar.gz --strip-components=1 -C bin/llamacpp/vulkan \
@@ -58,17 +58,17 @@ RUN    mkdir -p bin/llamacpp/vulkan \
     && rm -f llama.tar.gz
 
 USER root
-ARG LEMONADE_LLAMACPP_VERSION=b9752
-ADD https://github.com/lemonade-sdk/llama.cpp/releases/download/${LEMONADE_LLAMACPP_VERSION}/llama-${LEMONADE_LLAMACPP_VERSION}-bin-ubuntu-rocm-7.13-x64.tar.gz llama-rocm.tar.gz
+ARG LEMONADE_LLAMACPP_ROCM_VERSION=b9752
+ADD https://github.com/lemonade-sdk/llama.cpp/releases/download/${LEMONADE_LLAMACPP_ROCM_VERSION}/llama-${LEMONADE_LLAMACPP_ROCM_VERSION}-bin-ubuntu-rocm-7.13-x64.tar.gz llama-rocm.tar.gz
 RUN    mkdir -p bin/llamacpp/rocm-stable \
     && tar -xzf llama-rocm.tar.gz --strip-components=1 -C bin/llamacpp/rocm-stable \
     && chmod +x bin/llamacpp/rocm-stable/llama* \
     && chown -R lemonade-runtime:users bin/llamacpp bin/llamacpp/rocm-stable \
-    && echo "${LEMONADE_LLAMACPP_VERSION}" > bin/llamacpp/rocm-stable/version.txt \
+    && echo "${LEMONADE_LLAMACPP_ROCM_VERSION}" > bin/llamacpp/rocm-stable/version.txt \
     && rm -f llama-rocm.tar.gz
 
 USER root
-ARG LLAMACPP_CPU_VERSION=b9752
+ARG LLAMACPP_CPU_VERSION=b9747
 ADD https://github.com/ggml-org/llama.cpp/releases/download/${LLAMACPP_CPU_VERSION}/llama-${LLAMACPP_CPU_VERSION}-bin-ubuntu-x64.tar.gz llama-cpu.tar.gz
 RUN    mkdir -p bin/llamacpp/cpu \
     && tar -xzf llama-cpu.tar.gz --strip-components=1 -C bin/llamacpp/cpu \
@@ -76,6 +76,16 @@ RUN    mkdir -p bin/llamacpp/cpu \
     && chown -R lemonade-runtime:users bin/llamacpp bin/llamacpp/cpu \
     && echo "${LLAMACPP_CPU_VERSION}" > bin/llamacpp/cpu/version.txt \
     && rm -f llama-cpu.tar.gz
+
+USER root
+ARG LEMONADE_MOONSHINE_CPU_VERSION=moonshine0.0.62
+ADD https://github.com/lemonade-sdk/moonshine-server-rocm/releases/download/${LEMONADE_MOONSHINE_CPU_VERSION}/moonshine-server-${LEMONADE_MOONSHINE_CPU_VERSION}-linux-x64.tar.gz  moonshine-cpu.tar.gz
+RUN    mkdir -p bin/moonshine/cpu \
+    && chown -R lemonade-runtime:users bin/moonshine bin/moonshine/cpu \
+    && tar -xzf moonshine-cpu.tar.gz --strip-components=1 -C bin/moonshine/cpu \
+    && chmod +x bin/moonshine/cpu/moonshine* \
+    && echo "${LEMONADE_MOONSHINE_CPU_VERSION}" > bin/moonshine/cpu/version.txt \
+    && rm -f moonshine-cpu.tar.gz
 
 USER root
 ARG LEMONADE_WHISPER_VERSION=v1.8.4
@@ -97,8 +107,17 @@ RUN    mkdir -p bin/whispercpp/cpu \
     && rm -f whisper-cpu.tar.gz
 
 USER root
-ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=1f9ee88
-ENV LEMONADE_STABLEDIFFUSIONCPP_FULL_VERSION=master-672-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}
+ADD https://github.com/lemonade-sdk/whisper.cpp-rocm/releases/download/${LEMONADE_WHISPER_VERSION}/whisper-${LEMONADE_WHISPER_VERSION}-linux-rocm-gfx1151.tar.gz  whisper-rocm.tar.gz
+RUN    mkdir -p bin/whispercpp/rocm \
+    && chown -R lemonade-runtime:users bin/whispercpp bin/whispercpp/rocm \
+    && tar -xzf whisper-rocm.tar.gz --strip-components=1 -C bin/whispercpp/rocm \
+    && chmod +x bin/whispercpp/rocm/whisper* \
+    && echo "${LEMONADE_WHISPER_VERSION}" > bin/whispercpp/rocm/version.txt \
+    && rm -f whisper-rocm.tar.gz
+
+USER root
+ARG LEMONADE_STABLEDIFFUSIONCPP_VERSION=8caa3f9
+ENV LEMONADE_STABLEDIFFUSIONCPP_FULL_VERSION=master-721-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}
 ADD https://github.com/leejet/stable-diffusion.cpp/releases/download/${LEMONADE_STABLEDIFFUSIONCPP_FULL_VERSION}/sd-master-${LEMONADE_STABLEDIFFUSIONCPP_VERSION}-bin-Linux-Ubuntu-24.04-x86_64.zip sd-cpp-cpu.zip
 RUN    mkdir -p bin/sd-cpp/cpu \
     && chown -R lemonade-runtime:users bin/sd-cpp bin/sd-cpp/cpu \

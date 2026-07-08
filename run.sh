@@ -22,7 +22,7 @@ while [ "$(docker ps -a -q -f name=^lemonade$)" ]; do
     sleep 1
 done
 exec docker run --rm \
-    --detach \
+    -it \
     --name lemonade \
     --network=host \
     -v $HF_HOME:/hf:rw \
