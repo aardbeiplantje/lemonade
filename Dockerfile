@@ -168,7 +168,7 @@ RUN apt update -y && apt install -y \
         libxrt-npu2 \
     && rm -rf /var/lib/apt/lists/*
 
-ADD https://github.com/FastFlowLM/FastFlowLM/releases/download/v0.9.43/fastflowlm_0.9.43_ubuntu24.04_amd64.deb flm.deb
+ADD https://github.com/ROCm/FastFlowLM/releases/download/v1.0.0/fastflowlm_1.0.0_ubuntu24.04_amd64.deb flm.deb
 RUN dpkg -i flm.deb && rm flm.deb
 
 RUN apt-get update && apt-get install -y strace curl socat libvulkan1 \
